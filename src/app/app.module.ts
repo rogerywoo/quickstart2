@@ -9,9 +9,11 @@ import { HeroesComponent } from './heroes/heroes.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
-
+import { LoginComponent } from './login/login.component';
 
 import { HeroService } from './service/hero.service';
+import { AuthService } from './service/auth.service';
+
 
 @NgModule({
     imports: [
@@ -24,9 +26,10 @@ import { HeroService } from './service/hero.service';
                  HeroesComponent,
                  DashboardComponent,
                  HeroSearchComponent,
-                 HeroDetailComponent
+                 HeroDetailComponent,
+                 LoginComponent
     ],
-    providers: [HeroService],
+    providers: [HeroService, AuthService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
