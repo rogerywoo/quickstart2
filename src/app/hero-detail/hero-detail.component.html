@@ -1,0 +1,16 @@
+<div *ngIf="hero; else noHeroTemplate">
+  <h2>{{hero.name}} details!</h2>
+  <div>
+    <label>id: </label>{{hero.id}}</div>
+  <div>
+    <label>name: </label>
+    <input [(ngModel)]="hero.name" placeholder="name" />
+  </div>
+</div>
+<div>
+  <button (click)="goBack()">Back</button>
+  <button (click)="save()">Save</button>
+</div>
+<ng-template #noHeroTemplate>
+  <h2>We are working on it!</h2>
+</ng-template>
