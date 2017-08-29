@@ -1,6 +1,8 @@
-import {  Http, Response , HttpModule } from '@angular/http';
+import {  Http, Response , HttpModule, BaseRequestOptions } from '@angular/http';
+
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockBackend } from '@angular/http/testing';
 
 import { DashboardComponent } from './dashboard.component';
 import { HeroSearchComponent } from '../hero-search/hero-search.component';
@@ -32,17 +34,23 @@ describe('DashboardComponent', () => {
             declarations: [ DashboardComponent,HeroSearchComponent],
             providers: [
                 HeroService,
-                HeroSearchService
+                HeroSearchService,
+                {
+                    provide: Http, useFactory: (backend, options) => {
+                      return new Http(backend, options);
+                    },
+                    deps: [MockBackend, BaseRequestOptions]
+                },
+                MockBackend,
+                BaseRequestOptions
             ]
         })
         .compileComponents();
     }));
 
     beforeEach(() => {
-        heroService = TestBed.get(HeroService);
- //       spy = spyOn(heroService, 'getHeroes').and.returnValue(Promise.resolve(MockHeroesArray));
-
         fixture = TestBed.createComponent(DashboardComponent);
+        heroService = TestBed.get(HeroService);
 
         component = fixture.componentInstance;
         fixture.detectChanges();

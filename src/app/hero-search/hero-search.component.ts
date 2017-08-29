@@ -29,7 +29,7 @@ export class HeroSearchComponent implements OnInit {
     private searchTerms = new Subject<string>();
 
     constructor(
-//            private heroSearchService: HeroSearchService,
+            private heroSearchService: HeroSearchService,
             private router: Router) { }
 
     search(term: string): void {

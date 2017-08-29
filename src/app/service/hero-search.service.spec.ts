@@ -40,13 +40,13 @@ describe('HeroSearchService', () => {
         heroSearchService = TestBed.get(HeroSearchService); 
     });
 
-//    it('should be created', inject([HeroSearchService], (heroSearchService: HeroSearchService, backend) => {
-//        expect(heroSearchService).toBeTruthy();
-//        
-////        heroSearchService.search("string").subscribe((h) =>
-////            expect(h.length).toBe(5)
-////        );
-//    }));
+    it('should be created', inject([HeroSearchService], (heroSearchService: HeroSearchService, backend) => {
+        expect(heroSearchService).toBeTruthy();
+        
+//        heroSearchService.search("string").subscribe((h) =>
+//            expect(h.length).toBe(5)
+//        );
+    }));
     
 
     
