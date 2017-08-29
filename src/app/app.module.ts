@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
@@ -13,6 +14,12 @@ import { LoginComponent } from './login/login.component';
 
 import { HeroService } from './service/hero.service';
 import { AuthService } from './service/auth.service';
+import { HeroSearchService } from './service/hero-search.service';
+
+import { TestPipeComponent } from './test-pipe/test-pipe.component';
+import { TestAsyncPipeComponent } from './test-async-pipe/test-async-pipe.component';
+import { TestAsyncSubjectPipeComponent } from './test-async-subject-pipe/test-async-subject-pipe.component';
+import { SandboxComponent } from './sandbox/sandbox.component';
 
 
 @NgModule({
@@ -20,6 +27,7 @@ import { AuthService } from './service/auth.service';
         BrowserModule,
         AppRoutingModule,
         FormsModule,
+        HttpModule,
     ],
     declarations: [
                  AppComponent,
@@ -27,9 +35,13 @@ import { AuthService } from './service/auth.service';
                  DashboardComponent,
                  HeroSearchComponent,
                  HeroDetailComponent,
-                 LoginComponent
+                 LoginComponent,
+                 TestPipeComponent,
+                 TestAsyncPipeComponent,
+                 TestAsyncSubjectPipeComponent,
+                 SandboxComponent
     ],
-    providers: [HeroService, AuthService],
+    providers: [HeroService, AuthService,HeroSearchService],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

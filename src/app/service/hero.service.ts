@@ -4,7 +4,7 @@ import { Hero } from '../model/hero';
 @Injectable()
 export class HeroService {
 
-    testHeroes: Hero[] = [
+    heroes: Hero[] = [
                           {"id" : 1, "name" : "John"},
                           {"id" : 2, "name" : "Tom"},
                           {"id" : 3, "name" : "Roger"},
@@ -17,10 +17,15 @@ export class HeroService {
     constructor() { }
 
     getHeroes(): Promise<Array<Hero>> {
-        return Promise.resolve(this.testHeroes);
+        return Promise.resolve(this.heroes);
     }
     
-    getHero(hero: Hero ):Promise<Hero> {
-        return Promise.resolve(this.testHeroes[0]);
+    getHero(id: number ):Promise<Hero> {
+        console.log('HeroService.getHero source called');
+        return this.getHeroes()
+            .then (heroes => 
+                heroes.find(hero => hero.id === id)             
+            );
     }
 }
+

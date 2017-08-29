@@ -12,6 +12,7 @@ import { HeroService } from '../service/hero.service';
 })
 export class HeroDetailComponent implements OnInit {
     @Input() hero: Hero;
+
     
     constructor(
             private heroService: HeroService,
@@ -19,14 +20,16 @@ export class HeroDetailComponent implements OnInit {
           }
 
     ngOnInit(): void {
-        
-        // Get Hero
-        this.hero = {"id":1, "name": "Test"};
-    
+        this.route.params.forEach((params: Params) => {
+            if (params['id'] !== undefined) {
+                // Get Hero
+                this.getHero(+params['id']);
+            }
+        });
     }
-    
-    goBack():void{
-        alert('Back');
+       
+    goBack(savedHero: Hero = null): void {
+        if (window.history.length > 0) { window.history.back(); }
     }
     
     save(): void{
@@ -34,4 +37,17 @@ export class HeroDetailComponent implements OnInit {
         
     }
     
+    getHero(id: number ): void{ 
+        let testhero :Hero;
+//        console.log ('source called');
+        this.heroService.getHero(id)
+            .then(hero => 
+                {                    
+                    //console.log('hero-detail.getHero source called');                
+                    this.hero = hero;
+                    testhero = this.hero;
+                    
+                }
+            );       
+    }
 }

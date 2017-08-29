@@ -11,12 +11,13 @@ import 'rxjs/add/operator/switchMap';
 
 
 import { Hero } from '../model/hero';
-
+import { HeroSearchService } from '../service/hero-search.service';
 
 @Component({
   selector: 'hero-search',
   templateUrl: './hero-search.component.html',
-  styleUrls: ['./hero-search.component.css']
+  styleUrls: ['./hero-search.component.css'],
+  providers: [HeroSearchService]
 })
 export class HeroSearchComponent implements OnInit {
     heroes: Observable<Hero[]>;
@@ -27,7 +28,9 @@ export class HeroSearchComponent implements OnInit {
         
     private searchTerms = new Subject<string>();
 
-    constructor(private router: Router) { }
+    constructor(
+//            private heroSearchService: HeroSearchService,
+            private router: Router) { }
 
     search(term: string): void {
       // Push a search term into the observable stream.
@@ -39,9 +42,9 @@ export class HeroSearchComponent implements OnInit {
             .debounceTime(300)
             .distinctUntilChanged()
             .switchMap(t => t ? 
-                    Observable.of<Hero[]>(
-                       this.testHeroes
-                       ) : 
+                    Promise.resolve(this.testHeroes) :
+                    //this.heroSearchService.search(t) :
+                            // or the observable of empty heroes if no search term
                     Observable.of<Hero[]>([]))
             .catch(error => {
         // TODO: real error handling
