@@ -28,6 +28,7 @@ describe('HeroSearchService', () => {
         
             providers: [HeroSearchService, 
                         {provide:XHRBackend, useClass: MockBackend},
+                        MockBackend
                 ]
         });
         backend = TestBed.get(MockBackend); 

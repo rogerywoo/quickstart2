@@ -30,10 +30,28 @@ export class HeroSearchComponent implements OnInit {
 
     constructor(
             private heroSearchService: HeroSearchService,
-            private router: Router) { }
+            private router: Router) {
+        
+/*  For testing and learning Observables.
+        this.heroes = Observable.of(this.testHeroes);
+        
+        console.log('Begin Constructor');
+
+        this.heroes
+        .subscribe( data => {
+            for (let h of data) {
+                console.log(h.name);
+            }
+        });
+        
+                
+        console.log('End Constructor');
+        */
+    }
 
     search(term: string): void {
       // Push a search term into the observable stream.
+        console.log('Wrote ' + term)
         this.searchTerms.next(term);
     }
 
@@ -42,8 +60,8 @@ export class HeroSearchComponent implements OnInit {
             .debounceTime(300)
             .distinctUntilChanged()
             .switchMap(t => t ? 
-                    Promise.resolve(this.testHeroes) :
-                    //this.heroSearchService.search(t) :
+//                    Promise.resolve(this.testHeroes) :
+                    this.heroSearchService.search(t) :
                             // or the observable of empty heroes if no search term
                     Observable.of<Hero[]>([]))
             .catch(error => {

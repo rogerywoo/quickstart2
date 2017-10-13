@@ -17,17 +17,26 @@ export class HeroesComponent implements OnInit {
     showNgFor = false;
     
     constructor(
+        private router: Router,            
         private heroService: HeroService) {
     }
 
     ngOnInit() {        
-        this.getHeroes();
+//        this.getHeroes();
+      this.heroService
+      .getHeroes()
+      .subscribe(
+         /* happy path */ heroes => this.heroes = heroes,      
+         /* error path */ error => this.error = error);      
+      
     }
     
-    getHeroes():  Promise<any>   {
-        return this.heroService
-          .getHeroes()
-          .then(heroes => this.heroes = heroes)
-          .catch(error => this.error = error);
-      }
+//    getHeroes():  Promise<any>   {
+//        return this.heroService
+//          .getHeroes()
+//          .then(heroes => this.heroes = heroes)
+//          .catch(error => this.error = error);
+//      }
+    
+  
 }

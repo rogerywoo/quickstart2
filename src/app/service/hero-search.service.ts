@@ -15,8 +15,8 @@ export class HeroSearchService {
 
     search( term: string ): Observable<Hero[]> {
         return this.http
-            .get( `app/heroes/?name=${term}` )
-            .map(( r: Response ) => r.json().data as Hero[] )
+            .get(`http://localhost:3000/heroes/?name=${term}`)
+            .map(( r: Response ) => r.json())
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
                 return Observable.throw( error.message || error );

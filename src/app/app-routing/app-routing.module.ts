@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: 'testpipe',  component: TestPipeComponent },
     { path: 'testasyncpipe',  component: TestAsyncPipeComponent },
     { path: 'testasyncsubjectpipe',  component: TestAsyncSubjectPipeComponent },
-    { path: 'sandbox',  component: SandboxComponent },
+    { path: 'sandbox',  component: SandboxComponent },    
     ];
 
 @NgModule({

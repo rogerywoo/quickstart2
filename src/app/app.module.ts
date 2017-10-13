@@ -5,6 +5,10 @@ import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 
+//import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+//import { InMemoryDataService } from './service/in-memory-data.service';
+
+
 import { AppComponent } from './app.component';
 import { HeroesComponent } from './heroes/heroes.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -25,9 +29,10 @@ import { SandboxComponent } from './sandbox/sandbox.component';
 @NgModule({
     imports: [
         BrowserModule,
-        AppRoutingModule,
         FormsModule,
         HttpModule,
+//        InMemoryWebApiModule.forRoot(InMemoryDataService, { delay: 600 }),
+        AppRoutingModule       
     ],
     declarations: [
                  AppComponent,
