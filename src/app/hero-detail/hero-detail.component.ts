@@ -20,9 +20,10 @@ export class HeroDetailComponent implements OnInit {
           }
 
     ngOnInit(): void {
+        console.log("hero-detail ngOnInit");  
         this.route.params.forEach((params: Params) => {
             if (params['id'] !== undefined) {
-                // Get Hero
+                console.log("hero-detail ngOnInit, id = " + String(params['id']));    
                 this.getHero(+params['id']);
             }
         });
@@ -38,7 +39,7 @@ export class HeroDetailComponent implements OnInit {
     }
     
     getHero(id: number ): void{ 
-        let testhero :Hero;
+        let testhero: Hero;
 //        console.log ('source called');
         this.heroService.getHero(id)
             .then(hero => 

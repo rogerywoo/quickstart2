@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { Hero } from '../model/hero';
 import { HeroService } from '../service/hero.service';
 
+import { HeroSearchService } from '../service/hero-search.service';
+
+
 @Component( {
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -16,6 +19,7 @@ export class DashboardComponent implements OnInit {
 
     constructor(
         private heroService: HeroService,
+        private heroSearchService:  HeroSearchService,
         private router: Router ) {
 
     }
@@ -29,6 +33,17 @@ export class DashboardComponent implements OnInit {
   
     }
 
+    
+    testSearch(term: string ): void {      
+       this.heroSearchService
+      .searchFix()
+      .subscribe(
+         /* happy path */ heroes => this.heroes = heroes.slice( 0, 4 ) ,
+         /* error path */ error => this.errMsg = error);     
+  
+    }
+    
+    
     gotoDetail( hero: Hero ): void {
         //alert(hero.name);
         const link = ['/detail', hero.id];

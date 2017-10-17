@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { environment } from '../../environments/environment';
 import { Hero } from '../model/hero';
 
 @Injectable()
@@ -32,7 +33,7 @@ export class HeroService {
 //    
   
     getHeroes():  Observable<Hero[]>{
-
+        console.log("HeroService.getHeroes()");
       
 //              this.http.get('http://localhost:3000/heroes')
 //                      .map(response => response.json())
@@ -49,7 +50,7 @@ export class HeroService {
 //                        );      
       
         return this.http
-            .get('http://localhost:3000/heroes')
+            .get(environment.serviceUrl.concat('/heroes'))
             .map(( r: Response ) => r.json())
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
@@ -58,29 +59,12 @@ export class HeroService {
     };
     
     getHero(id: number ): Promise<Hero> {
-            return this.http.get('http://localhost:3000/heroes/'  + String(id))
+            return this.http.get(environment.serviceUrl.concat('/heroes/', String(id)))
             .map(( r: Response ) => r.json())
-              .toPromise()
+            .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
                 
             });
-      
-//      this.getHeroes()
-//            .subscribe(
-//         /* happy path */ hero => hero.id === id));     
-//         /* error path */ error => this.error = error);  
-      
-//            .then (heroes => 
-//                heroes.find(hero => hero.id === id)             
-//            );
-    }
-  
-//        this.heroService
-//      .getHeroes()
-//      .subscribe(
-//         /* happy path */ heroes => this.heroes = heroes,      
-//         /* error path */ error => this.error = error);      
-
-  
+    }  
 }

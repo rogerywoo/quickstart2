@@ -1,8 +1,14 @@
+import {  Http, Response , HttpModule, BaseRequestOptions } from '@angular/http';
 import { async, ComponentFixture, TestBed, fakeAsync, tick  } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MockBackend } from '@angular/http/testing';
 import { FormsModule } from '@angular/forms';
 
-import { AppComponent } from '../app.component';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+
 import { HeroesComponent } from './heroes.component';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 import { Hero } from '../model/hero';
@@ -25,10 +31,20 @@ describe('HeroesComponent', () => {
         TestBed.configureTestingModule({
             imports:[RouterTestingModule,
                 FormsModule],  
-            declarations: [ AppComponent,
+            declarations: [ 
                 HeroesComponent,
-                HeroDetailComponent],
-            providers: [HeroService]
+                HeroDetailComponent
+            ],
+            providers: 
+                [HeroService,
+                {
+                    provide: Http, useFactory: (backend, options) => {
+                      return new Http(backend, options);
+                    },
+                    deps: [MockBackend, BaseRequestOptions]
+                },
+                MockBackend,
+                BaseRequestOptions]
         })
         .compileComponents();
     }));
@@ -46,20 +62,21 @@ describe('HeroesComponent', () => {
     
     describe('HeroesComponent: Init Test', () => {
         it('Heroes has value after ngOnInit using done method.',  (done) => {  
-            let spy = spyOn(heroService, 'getHeroes').and.returnValue(Promise.resolve(MockHeroesArray));
+            let spy = spyOn(heroService, 'getHeroes').and.returnValue(Observable.of(MockHeroesArray));
+            
             component.ngOnInit();
                 
-            spy.calls.mostRecent().returnValue.then(() => { 
-                fixture.detectChanges();
-                expect(component.heroes).toBeTruthy();
-                expect(component.heroes.length).toBe(5);
-                done(); 
-            });
+            spy.calls.mostRecent();
+            
+            fixture.detectChanges();
+            expect(component.heroes).toBeTruthy();
+            expect(component.heroes.length).toBe(5);
+            done(); 
             
         });
         
         it('Heroes has value ngOnInit using using fakeAsync() and tick()', fakeAsync(() => { 
-            spyOn(heroService, 'getHeroes').and.returnValue(Promise.resolve(MockHeroesArray));
+            spyOn(heroService, 'getHeroes').and.returnValue(Observable.of(MockHeroesArray));
             component.ngOnInit();
             
             tick();

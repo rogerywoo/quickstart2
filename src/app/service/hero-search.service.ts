@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
+import { environment } from '../../environments/environment';
 import { Hero } from '../model/hero';
 
 @Injectable()
@@ -15,7 +16,18 @@ export class HeroSearchService {
 
     search( term: string ): Observable<Hero[]> {
         return this.http
-            .get(`http://localhost:3000/heroes/?name=${term}`)
+            .get(environment.serviceUrl.concat(`/heroes/?name=${term}`))
+            .map(( r: Response ) => r.json())
+            .catch(( error: any ) => {
+                console.error( 'An friendly error occurred', error );
+                return Observable.throw( error.message || error );
+            });
+    }
+    
+    searchFix(): Observable<Hero[]> {
+        console.log("HeroSearchService.searchFix");
+        return this.http
+            .get(environment.serviceUrl.concat(`/heroes`))
             .map(( r: Response ) => r.json())
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
