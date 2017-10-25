@@ -17,9 +17,16 @@ export class HeroSearchService {
     search( term: string ): Observable<Hero[]> {
         return this.http
             .get(environment.serviceUrl.concat(`/heroes/?name=${term}`))
-            .map(( r: Response ) => r.json())
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+//                    throw  Observable.throw('This request has failed ' + r.status);
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
             .catch(( error: any ) => {
-                console.error( 'An friendly error occurred', error );
+                console.error( 'A friendly error occurred', error );
                 return Observable.throw( error.message || error );
             });
     }
@@ -28,7 +35,13 @@ export class HeroSearchService {
         console.log("HeroSearchService.searchFix");
         return this.http
             .get(environment.serviceUrl.concat(`/heroes`))
-            .map(( r: Response ) => r.json())
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
                 return Observable.throw( error.message || error );

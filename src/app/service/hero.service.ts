@@ -11,47 +11,22 @@ import { Hero } from '../model/hero';
 @Injectable()
 export class HeroService {
 
-  heroes: Hero[];
-  
-//    heroes: Hero[] = [
-//                          {"id" : 1, "name" : "John"},
-//                          {"id" : 2, "name" : "Tom"},
-//                          {"id" : 3, "name" : "Roger"},
-//                          {"id" : 4, "name" : "Bill"},
-//                          {"id" : 5, "name" : "Jill"},
-//                          {"id" : 6, "name" : "Tanya"},
-//                          {"id" : 7, "name" : "Robin"},
-//                          {"id" : 8, "name" : "Brenda"}
-//                          ];
+    heroes: Hero[];
     
     constructor( private http: Http ) { }
-
-
-//    getHeroes(): Promise<Array<Hero>> {
-//        return Promise.resolve(this.heroes);
-//    }
-//    
   
     getHeroes():  Observable<Hero[]>{
         console.log("HeroService.getHeroes()");
-      
-//              this.http.get('http://localhost:3000/heroes')
-//                      .map(response => response.json())
-//                    .subscribe(
-//                        function(response) { 
-//                          this.heroes =  response;
-//                          //console.log("Success Response" + response.json().data);},                          
-//                        },
-//                        function(error) { console.log("Error happened" + error)},
-//                        function() 
-//                          { console.log("the subscription is completed");
-//                            return this.heroes;
-//                          }
-//                        );      
-      
+            
         return this.http
             .get(environment.serviceUrl.concat('/heroes'))
-            .map(( r: Response ) => r.json())
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
                 return Observable.throw( error.message || error );
@@ -60,7 +35,13 @@ export class HeroService {
     
     getHero(id: number ): Promise<Hero> {
             return this.http.get(environment.serviceUrl.concat('/heroes/', String(id)))
-            .map(( r: Response ) => r.json())
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
             .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );

@@ -9,43 +9,45 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
-import {HeroService} from './hero.service'
+import {HeroSearchService} from './hero-search.service'
 import { Hero } from '../model/hero';
 
 const HERO_ONE = {"id":12,"name":"Narco"};
 const HERO_TWO = {"id":13,"name":"Bombasto"};
 
-
-describe('HeroService', () => {
+describe('MockBackend HeroSearchService Example', () => {
     let 
         heroes: Hero[],
-        error: any,
-        hero:Hero;
-        
+        error: any;
+    
     beforeEach(() => {
         this.injector = ReflectiveInjector.resolveAndCreate([
             {provide: ConnectionBackend, useClass: MockBackend},
             {provide: RequestOptions, useClass: BaseRequestOptions},
             Http,
-            HeroService,
+            HeroSearchService,
         ]);
-        this.heroService = this.injector.get(HeroService);
+        this.heroSearchService = this.injector.get(HeroSearchService);
         this.backend = this.injector.get(ConnectionBackend) as MockBackend;
         this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
     });
-
-    it('getHeroes() should query current service url', () => {
-        this.heroService.getHeroes();
+    
+    it('search() should query current service url', () => {
+        this.heroSearchService.search("a");
         expect(this.lastConnection).toBeDefined('no http service connection at all?');
         console.log ("url = " + this.lastConnection.request.url);
-        expect(this.lastConnection.request.url).toMatch(/\/heroes/, 'url invalid');
+        expect(this.lastConnection.request.url).toMatch(/heroes\/\?name\=a/, 'url invalid');
     });
     
-    it('getHeroes() should return some heroes', fakeAsync(() => {
+
+    it('search() should return some heroes', fakeAsync(() => {
         
-        this.heroService.getHeroes()  
+        this.heroSearchService.search("a")      
             .subscribe(
-         /* happy path */ heroes => {          
+         /* happy path */ heroes => {
+             console.log("backfrom search");
+             console.log("heroes = " + heroes);
+             console.log("end step");           
              this.heroes = heroes},      
          /* error path */ error => this.error = error);      
       
@@ -65,10 +67,10 @@ describe('HeroService', () => {
         expect(this.heroes[0]).toEqual(HERO_ONE, ' HERO_ONE should be the first hero');
         expect(this.heroes[1]).toEqual(HERO_TWO, ' HERO_TWO should be the second hero');
     }));
-    
-    it('getHeroes() while server is down', fakeAsync(() => {
+
+    it('search() while server is down', fakeAsync(() => {
         this.heroes = null;
-        this.heroService.getHeroes()       
+        this.heroSearchService.search("a")      
             .subscribe(
                 heroes => {
                     console.log("backfrom search");
@@ -91,57 +93,59 @@ describe('HeroService', () => {
         expect(this.heroes).toBeNull();
         expect(this.error).toBeDefined();
     }));
+
+    it('searchFix() should query correct service url', () => {
+        this.heroSearchService.searchFix();
+        expect(this.lastConnection).toBeDefined('no http service connection at all?');
+        console.log ("url = " + this.lastConnection.request.url);
+        expect(this.lastConnection.request.url).toMatch(/\/heroes/, 'url invalid');
+    });
     
-    it('getHero() should return one hero', fakeAsync(() => {
-        let id = 13;
-        this.heroService.getHero(id)       
-            .then(h => 
-                {        
-                    console.log ("got promise");            
-                    console.log ("hero = " + h);
-                    console.log ("hero json = " + JSON.stringify(h));   
-                    this.hero = h;
-                    console.log (this.hero.id);
-                }
-            );              
+    it('searchFix() should return some heroes', fakeAsync(() => {
+        
+        this.heroSearchService.searchFix()      
+            .subscribe(
+         /* happy path */ heroes => {
+             this.heroes = heroes},      
+         /* error path */ error => this.error = error);      
       
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
             status: 200,
         
-            body: JSON.stringify(                
+            body: JSON.stringify(
+                [
+                    HERO_ONE,
                     HERO_TWO
-                )
+                ])
             })));
         
         tick();
         
-        expect(this.hero).toEqual(HERO_TWO, ' hero should be the second hero');
+        expect(this.heroes.length).toEqual(2, 'should contain given amount of heroes');
+        expect(this.heroes[0]).toEqual(HERO_ONE, ' HERO_ONE should be the first hero');
+        expect(this.heroes[1]).toEqual(HERO_TWO, ' HERO_TWO should be the second hero');
     }));
-    
-    it('getHero() while server is down', fakeAsync(() => {
-        let id = 13;
-        
-        this.hero = null;
-        this.heroService.getHero(id)      
-            .then(h => 
-                {        
-                    this.hero = h;
-                    console.log (this.hero.id);
-                },               
-            )
-            .catch(err => {
-                 this.error = err;
-            });  
-    
+
+    it('searchFix() while server is down', fakeAsync(() => {
+        this.heroes = null;
+        this.heroSearchService.search("a")      
+            .subscribe(
+                heroes => {     
+                    this.heroes = heroes},      
+                error => {
+                    console.log("error");                
+                    this.error = error;
+                    console.log("error = " + this.error);
+                },
+                () => console.log("DONE"));   
+              
         this.lastConnection.mockRespond(new Response(new ResponseOptions({
             status: 404,
             statusText: 'URL not Found',
             })));
         tick();
         
-        expect(this.hero).not.toBeTruthy();
+        expect(this.heroes).toBeNull();
         expect(this.error).toBeDefined();
     }));
-    
-    
 });
