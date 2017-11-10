@@ -17,16 +17,12 @@
 </div>
 
 <div *ngIf="selectedHero">
-	<h2>{{selectedHero.name | uppercase}} is my hero</h2>
+	<h2>{{selectedHero.name | uppercase}} is my hero!!!</h2>
 	<button (click)="gotoDetail()">View Details</button>
 </div>
 
 <div>
-	<style>
-.hidden {
-	visibility: hidden
-}
-</style>
+
 	<h4>ngFor Features</h4>
 	<button (click)="showNgFor=!showNgFor">{{showNgFor ? 'Hide' :
 		'Show'}} ngFor Features</button>
@@ -45,3 +41,9 @@
 		</tbody>
 	</table>
 </div>
+
+<style>
+	.hidden {
+		visibility: hidden
+	}
+</style>

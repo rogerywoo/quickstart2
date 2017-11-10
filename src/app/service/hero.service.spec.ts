@@ -15,7 +15,6 @@ import { Hero } from '../model/hero';
 const HERO_ONE = {"id":12,"name":"Narco"};
 const HERO_TWO = {"id":13,"name":"Bombasto"};
 
-
 describe('HeroService', () => {
     let 
         heroes: Hero[],
@@ -143,5 +142,64 @@ describe('HeroService', () => {
         expect(this.error).toBeDefined();
     }));
     
+    it('addHero()', fakeAsync(() => {
+        let hero :Hero;
+        let newId : number;
+        
+        hero = new Hero();
+        hero.name = 'Testhero';
+
+        this.heroService.addHero(hero)
+            .then(h => 
+                {        
+                    newId = h;
+                    console.log (newId);
+                },               
+            )
+            .catch(err => {
+                 this.error = err;
+            });  
     
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            status: 200,
+        
+            body: JSON.stringify(                
+                    30
+                )
+            })));
+        
+        tick();
+        
+        expect(newId).toEqual(30, ' hero should be the second hero');
+    }));
+    
+    it('deleteHero()', fakeAsync(() => {
+        let heroId :number;
+        let numberdeleted : number;
+        
+        heroId = 10;
+
+        this.heroService.deleteHero(heroId)
+            .then(h => 
+                {        
+                    numberdeleted = h;
+                    console.log (numberdeleted);
+                },               
+            )
+            .catch(err => {
+                 this.error = err;
+            });  
+    
+        this.lastConnection.mockRespond(new Response(new ResponseOptions({
+            status: 200,
+        
+            body: JSON.stringify(                
+                    1
+                )
+            })));
+        
+        tick();
+        
+        expect(numberdeleted).toEqual(1, 'Number of records delete should be one');
+    }));
 });

@@ -21,16 +21,52 @@ export class HeroesComponent implements OnInit {
         private heroService: HeroService) {
     }
 
+    getHeroes():  void {
+        this.heroService
+          .getHeroes()
+          .subscribe(
+             /* happy path */ heroes => this.heroes = heroes,      
+             /* error path */ error => this.error = error);            
+    }
+    
     ngOnInit() {        
-
-      this.heroService
-      .getHeroes()
-      .subscribe(
-         /* happy path */ heroes => this.heroes = heroes,      
-         /* error path */ error => this.error = error);      
+        this.getHeroes();
+        
+//      this.heroService
+//      .getHeroes()
+//      .subscribe(
+//         /* happy path */ heroes => this.heroes = heroes,      
+//         /* error path */ error => this.error = error);      
       
     }
     
+    addHero(): void {
+        this.addingHero = true;
+        this.selectedHero = null;
+    }
+    
+    deleteHero(hero, event): void {
+        let numberDeleted: number;
+        alert (hero.id);
+        event.stopPropagation();
+        
+        this.heroService.deleteHero(hero.id)
+            .then (count =>
+            {
+                numberDeleted = count;
+                this.getHeroes();
+            });        
+    }
+    
+    onSelect(hero): void {
+        this.selectedHero = hero;
+    }
+    
+    
+    gotoDetail(): void {
+        this.router.navigate(['/detail', this.selectedHero.id]);
+    }
+        
 //    getHeroes():  Promise<any>   {
 //        return this.heroService
 //          .getHeroes()

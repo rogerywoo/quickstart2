@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 import { environment } from '../../environments/environment';
+import { ConstantService } from './constant.service';
 import { Hero } from '../model/hero';
+
 
 @Injectable()
 export class HeroService {
@@ -34,7 +36,7 @@ export class HeroService {
     };
     
     getHero(id: number ): Promise<Hero> {
-            return this.http.get(environment.serviceUrl.concat('/heroes/', String(id)))
+        return this.http.get(environment.serviceUrl.concat('/heroes/', String(id)))
             .map(( r: Response ) => { 
                 if ((r.status < 200)  || (r.status >=300)){
                     throw  new Error(('This request has failed ' + r.status));
@@ -48,4 +50,57 @@ export class HeroService {
                 
             });
     }  
+    
+    addHero(hero: Hero ): Promise<number> {
+        const heroJson = JSON.stringify(hero);
+        
+        return this.http.post(environment.serviceUrl.concat('/heroes/'), heroJson, ConstantService.JSON_HEADER)
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
+            .toPromise()
+            .catch(( error: any ) => {
+                console.error( 'An friendly error occurred', error );
+                
+            });
+    }    
+      
+    updateHero(hero: Hero ): Promise<number> {
+        const heroJson = JSON.stringify(hero);
+        
+        return this.http.post(environment.serviceUrl.concat('/heroes/'), heroJson, ConstantService.JSON_HEADER)
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
+            .toPromise()
+            .catch(( error: any ) => {
+                console.error( 'An friendly error occurred', error );
+                
+            });
+    }
+        
+    deleteHero(heroId: number ): Promise<number> {
+        
+        return this.http.delete(environment.serviceUrl.concat('/heroes/', String(heroId)))
+            .map(( r: Response ) => { 
+                if ((r.status < 200)  || (r.status >=300)){
+                    throw  new Error(('This request has failed ' + r.status));
+                }          
+                else{                     
+                    return r.json();
+                }})
+            .toPromise()
+            .catch(( error: any ) => {
+                console.error( 'An friendly error occurred', error );
+                
+            });
+    }   
 }
