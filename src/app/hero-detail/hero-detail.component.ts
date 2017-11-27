@@ -38,14 +38,17 @@ export class HeroDetailComponent implements OnInit {
     
     save(savedHero: Hero): void{
         if (!savedHero.id) {
-            alert('New ' + savedHero.name);
+
             this.heroService.addHero(savedHero)
                 .then(h =>{
                     alert(h);
                     this.goBack();
                    
                 })
-            .catch(error => this.error = error); // TODO: Display error message
+            .catch(error => {
+                this.error = error;
+                alert (error);
+            }); // TODO: Display error message
             
         } else {
             alert('Rename Hero Id = ' + savedHero.id);                  
@@ -63,6 +66,10 @@ export class HeroDetailComponent implements OnInit {
                     testhero = this.hero;
                     
                 }
-            );       
+            )
+            .catch(error => {
+                this.error = error;
+                alert (error);
+            });
     }
 }

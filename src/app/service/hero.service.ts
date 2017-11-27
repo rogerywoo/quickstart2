@@ -47,6 +47,7 @@ export class HeroService {
             .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
+                throw error;
                 
             });
     }  
@@ -65,6 +66,7 @@ export class HeroService {
             .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
+                throw  error;
                 
             });
     }    
@@ -83,6 +85,7 @@ export class HeroService {
             .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
+                throw error;
                 
             });
     }
@@ -100,6 +103,7 @@ export class HeroService {
             .toPromise()
             .catch(( error: any ) => {
                 console.error( 'An friendly error occurred', error );
+                throw  error;
                 
             });
     }   

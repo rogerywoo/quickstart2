@@ -55,7 +55,11 @@ export class HeroesComponent implements OnInit {
             {
                 numberDeleted = count;
                 this.getHeroes();
-            });        
+            })
+            .catch(error => {
+                this.error = error;
+                alert (error);
+            }); // TODO: Display error message);        
     }
     
     onSelect(hero): void {
