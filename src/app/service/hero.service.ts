@@ -74,7 +74,7 @@ export class HeroService {
     updateHero(hero: Hero ): Promise<number> {
         const heroJson = JSON.stringify(hero);
         
-        return this.http.post(environment.serviceUrl.concat('/heroes/'), heroJson, ConstantService.JSON_HEADER)
+        return this.http.put(environment.serviceUrl.concat('/heroes/'), heroJson, ConstantService.JSON_HEADER)
             .map(( r: Response ) => { 
                 if ((r.status < 200)  || (r.status >=300)){
                     throw  new Error(('This request has failed ' + r.status));

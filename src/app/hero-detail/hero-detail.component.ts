@@ -47,11 +47,21 @@ export class HeroDetailComponent implements OnInit {
                 })
             .catch(error => {
                 this.error = error;
-                alert (error);
+                alert (error.statusTex);
             }); // TODO: Display error message
             
         } else {
-            alert('Rename Hero Id = ' + savedHero.id);                  
+            alert('Rename Hero Id = ' + savedHero.id);     
+            this.heroService.updateHero (savedHero)
+                .then(h =>{
+                    alert(h);
+                    this.goBack();
+                   
+                })
+            .catch(error => {
+                this.error = error;
+                alert (error.statusText);
+            }); // TODO: Display error message
         }
     }
     
@@ -69,7 +79,7 @@ export class HeroDetailComponent implements OnInit {
             )
             .catch(error => {
                 this.error = error;
-                alert (error);
+                alert (error.statusTex);
             });
     }
 }
