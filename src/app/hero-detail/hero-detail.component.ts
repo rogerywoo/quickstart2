@@ -36,32 +36,38 @@ export class HeroDetailComponent implements OnInit {
         if (window.history.length > 0) { window.history.back(); }
     }
     
-    save(savedHero: Hero): void{
-        if (!savedHero.id) {
-
-            this.heroService.addHero(savedHero)
-                .then(h =>{
-                    alert(h);
-                    this.goBack();
-                   
-                })
-            .catch(error => {
-                this.error = error;
-                alert (error.statusTex);
-            }); // TODO: Display error message
-            
-        } else {
-            alert('Rename Hero Id = ' + savedHero.id);     
-            this.heroService.updateHero (savedHero)
-                .then(h =>{
-                    alert(h);
-                    this.goBack();
-                   
-                })
-            .catch(error => {
-                this.error = error;
-                alert (error.statusText);
-            }); // TODO: Display error message
+    saveHero(savedHero: Hero): void{
+        try{
+            if (!savedHero.id) {
+                console.log("adding hero.... no id")
+                this.heroService.addHero(savedHero)
+                    .then(h =>{
+                        alert (h);                        
+                        console.log("h = " + h);
+                        this.goBack();
+                       
+                    })
+                .catch(error => {
+                    this.error = error;
+                    console.log("promise error adding Hero = " + error);
+                    alert (error.message);
+                }); // TODO: Display error message
+                
+            } else {
+                console.log("saving hero.... id = " + savedHero.id);    
+                this.heroService.updateHero (savedHero)
+                    .then(h =>{
+                        alert(h);
+                        this.goBack();
+                       
+                    })
+                .catch(error => {
+                    this.error = error;
+                    alert (error.message);
+                }); // TODO: Display error message
+            }
+        }catch(ex){
+            console.log("Exception error = " + ex);
         }
     }
     

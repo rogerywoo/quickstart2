@@ -25,8 +25,8 @@
   padding: 20px;
   text-align: center;
   color: #eee;
-  max-height: 120px;
-  min-width: 120px;
+  height: 120px;
+  width: 120px;
   background-color: #607D8B;
   background-color: rgb(0,120,215);
   border-radius: 2px;
@@ -37,6 +37,7 @@
   cursor: pointer;
   color: #607d8b;
 }
+
 .grid-pad {
   padding: 10px 0;
 }

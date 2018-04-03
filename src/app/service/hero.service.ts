@@ -55,6 +55,15 @@ export class HeroService {
     addHero(hero: Hero ): Promise<number> {
         const heroJson = JSON.stringify(hero);
         
+//        return new Promise(function (resolve, reject) {
+//            try{
+//                throw new Error("We have a problem");
+//            }catch (err){
+//                reject(err);
+//            }
+//                       
+//        });
+        
         return this.http.post(environment.serviceUrl.concat('/heroes/'), heroJson, ConstantService.JSON_HEADER)
             .map(( r: Response ) => { 
                 if ((r.status < 200)  || (r.status >=300)){

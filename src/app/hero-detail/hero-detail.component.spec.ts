@@ -25,6 +25,8 @@ describe('HeroDetailComponent', () => {
     ];
     let heroService: HeroService;
 
+    let addedHero: Hero = <Hero>{name: 'IronMan'};
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports:[RouterTestingModule, FormsModule, HttpModule],              
@@ -80,16 +82,53 @@ describe('HeroDetailComponent', () => {
             let heroServiceSpy = spyOn(heroService, 'getHero').and
                 .returnValue(Promise.resolve(MockHeroesArray.find(h => h.id === testId)));
             fixture.detectChanges();
+                
+            component.getHero(3);
+            fixture.whenStable().then(() => { 
+                expect(component.hero.name).toBe('Hulk');
+                expect(heroServiceSpy).toHaveBeenCalledWith(3);
+            });
+
+        })); 
+    
+    });    
+    
+    describe('HeroDetailComponent: save Test', () => {   
+        it('Heroes has save', () => { 
+            expect(component.saveHero).toBeTruthy();
+            
+        });  
+        
+        it('Test saveHero handling adding hero', async(() => {                
+            
+            let heroServiceSpy = spyOn(heroService, 'addHero').and
+                .returnValue(Promise.resolve(5));
+            
+            fixture.detectChanges();
             
             fixture.whenStable().then(() => { 
                 
-                component.getHero(3);
+                component.saveHero(addedHero);
                 fixture.whenStable().then(() => { 
-                    expect(component.hero.name).toBe('Hulk');
-                    expect(heroServiceSpy).toHaveBeenCalledWith(3);
+              
+                    expect(component.error).toBeUndefined();
                 });
             });
-        })); 
+        }));         
+    
+        it('Test saveHero handling of error', async(() => {                
+            let errorMsg = "Test error";
+            
+            let heroServiceSpy = spyOn(heroService, 'addHero').and
+            .returnValue(Promise.reject(errorMsg));
+            
+            fixture.detectChanges();
+                            
+            component.saveHero(addedHero);
+            fixture.whenStable().then(() => {           
+                expect(component.error).toBe(errorMsg);           
+            });
+        }));   
     
     });    
 });
