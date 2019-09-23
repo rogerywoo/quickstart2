@@ -8,7 +8,7 @@ import { ISubscription  } from 'rxjs/Subscription';
     styleUrls: ['./test-async-pipe.component.css']
 })
 export class TestAsyncPipeComponent implements OnInit {
-    promise: Promise<string>;
+    promise: Promise<any>;
     observable: Observable<number>;
     subscription: ISubscription;
     observableData: number;

@@ -10,7 +10,7 @@ import {Subject} from "rxjs/Subject";
     styleUrls: ['./test-async-subject-pipe.component.css']
   })
 export class TestAsyncSubjectPipeComponent implements OnInit {
-    promise: Promise<string>;
+    promise: Promise<any>;
     observable: Observable<number>;
     subscription: Subscription;
     observableData: number;
